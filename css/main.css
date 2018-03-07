@@ -1,0 +1,115 @@
+#header{
+    text-align: center;
+}
+
+.maindiv{
+    width: 80%;
+    margin-left:10%;
+    margin-bottom:20px;
+    border:1px solid green;
+    display: flex;
+}
+
+.sidediv{
+    width:25%;
+}
+
+#middlediv{
+    width:50%;
+    vertical-align: bottom;
+}
+
+.content-div{
+    width:95%;
+    margin-left:2.5%;
+    border:1px solid red;
+}
+
+#stats{
+    width:30%;
+    border:1px solid black;
+}
+
+#list-messages{
+    width:70%;
+    display: inline-block;
+}
+
+#nouveau-message{
+
+}
+
+.messages{
+    width:90%;
+    margin:5%;
+    border:1px solid black;
+}
+
+#message-content-div{
+    display: flex;
+}
+
+#messages{
+
+}
+
+#bar-recherche{
+    width:80%;
+}
+
+#search-button{
+    width:15%;
+}
+
+#logout{
+    cursor: pointer;
+    color: inherit;
+    text-decoration: none;
+}
+
+#user-bar{
+    text-align: center;
+}
+
+#search-bar-div{
+    margin-top:40px;
+}
+
+#new-message-title{
+    text-align: center;
+}
+
+.contenu-message,
+.list-item,
+#new-message{
+    margin-left:5%;
+    width:90%;
+}
+
+#new-message-button{
+    height:36.75px;
+    width:100%;
+}
+
+textarea{
+    resize: none;
+}
+
+#div-field-new-message{
+    width:70%;
+}
+
+#div-button-new-message{
+    width:25%;
+}
+
+.user-message{
+    float: left;
+    display: block;
+}
+
+.date-message{
+    float: right;
+    display: block;
+}
+
