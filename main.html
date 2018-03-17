@@ -9,20 +9,19 @@
     </head>
     <body>
         <header>
-            <p id="header">Header</p>
-        </header>
-        <main>
-            <div class="maindiv">
+            <div class="head">
                 <div class="sidediv">
-                    <div class="content-div">
+                    <div class="content-div content-div-logo">
                         <img src="photos/logo.png" alt="Logo" height="70" width="70">
-                        <span>Twister</span>
+                        <div>
+                            <p id="logo-name">Twister</p>
+                        </div>
                     </div>
                 </div>
                 <div id="middlediv">
-                    <div class="content-div" id="search-bar-div">
+                    <div id="search-bar-div" class="content-div">
                         <input id="bar-recherche" type="text" placeholder="Recherche">
-                        <input type="submit" name="Rechercher" id="search-button">
+                        <img id="search-logo" src="photos/search.png" alt="Logo" height="30" width="30">
                     </div>
                 </div>
                 <div class="sidediv">
@@ -30,53 +29,57 @@
                         <p>Connecté : Geron</p>
                         <a href="" id="logout">Deconnexion</a>
                     </div>
+
                 </div>
             </div>
+        </header>
+        <main>
 
-            <div class="maindiv">
+            <div class="maindiv" style="">
                 <div id="stats">
                     Zone Statistique
                 </div>
                 <div id="list-messages">
                     <div id="nouveau-message" class="messages">
-                        <h3 id="new-message-title">Nouveau message</h3>
+                        <h2 id="new-message-title">Nouveau Twiste</h2>
                         <div id="message-content-div">
                             <div id="div-field-new-message">
                                 <textarea rows="2" placeholder="Nouveau message" id="new-message">
                                 </textarea>
                             </div>
                             <div id="div-button-new-message">
-                                <input type="submit" name="" id="new-message-button">
+                                <input type="submit" value="Je Twiste!" id="new-message-button"
+                                       style="border-radius: 15px; background: linear-gradient(45deg, #599ba5 5%, #4fa49a 30%, #4361c2); border-color: #4361c2; color :white; font-size: 20px">
                             </div>
                         </div>
                     </div>
 
                     <div id="messages" class="messages">
                         <div class="list-item">
-                            <div style="display:flex; width: 100%; margin-top: 10px; margin-bottom: 10px;">
-                                <div style="width: 50%;">
+                            <div class="list-item-top">
+                                <div class="list-item-top-span">
                                     <span class="user-message">user</span>
                                 </div>
-                                <div style="width: 50%;">
+                                <div class="list-item-top-span">
                                     <span class="date-message">Date</span>
                                 </div>
                             </div>
-                            <div style="margin-top: 10px; margin-bottom: 10px;">
-                                <p class="contenu-message" style="border : 1px solid green; margin: 0; width: 100%;">Contenu</p>
+                            <div class="list-item-mid">
+                                <p class="contenu-message">Contenu</p>
                             </div>
                             <div>
-                                <span style="cursor: pointer;" class="show-com">Commentaires</span>
+                                <span class="show-com" >Commentaires</span>
                                 <div class="commentaire-item">
-                                    <div style="display:flex; width: 90%; margin-top: 10px; margin-bottom: 10px; margin-left: 10%;">
-                                        <div style="width: 50%;">
+                                    <div class="commentaire-item-top">
+                                        <div class="list-item-top-span">
                                             <span class="user-message">user</span>
                                         </div>
-                                        <div style="width: 50%;">
+                                        <div class="list-item-top-span">
                                             <span class="date-message">Date</span>
                                         </div>
                                     </div>
-                                    <div style="margin-top: 10px; margin-bottom: 10px; width: 90%; margin-left: 10%;">
-                                        <p class="contenu-message" style="border : 1px solid green; margin: 0; width: 100%;">Contenu</p>
+                                    <div class="commentaire-item-bottom">
+                                        <p class="contenu-message">Contenu</p>
                                     </div>
                                 </div>
                             </div>

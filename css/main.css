@@ -2,11 +2,27 @@
     text-align: center;
 }
 
+header{
+    background: rgba(55, 61, 73, 0.975);
+    color: #fff;
+    padding-bottom: 20px;
+}
+
+body{
+    background-image: url("/photos/overlay2.png"), url("/photos/overlay3.svg"), linear-gradient(45deg, #9dc66b 5%, #4fa49a 30%, #4361c2);
+    height: 700px;
+    margin:0;
+}
+
+.maindiv{
+    color: #fff;
+    height:100%;
+}
+
+.head,
 .maindiv{
     width: 80%;
     margin-left:10%;
-    margin-bottom:20px;
-    border:1px solid green;
     display: flex;
 }
 
@@ -22,43 +38,33 @@
 .content-div{
     width:95%;
     margin-left:2.5%;
-    border:1px solid red;
 }
 
 #stats{
-    width:30%;
-    border:1px solid black;
+    width:25%;
+    border-right: 5px solid rgba(55, 61, 73, 0.975);
 }
 
 #list-messages{
-    width:70%;
+    width:75%;
     display: inline-block;
-}
-
-#nouveau-message{
-
 }
 
 .messages{
     width:90%;
     margin:5%;
-    border:1px solid black;
 }
 
 #message-content-div{
     display: flex;
 }
 
-#messages{
-
-}
-
 #bar-recherche{
-    width:80%;
+    width:95%;
 }
 
 #search-button{
-    width:15%;
+    width:20%;
 }
 
 #logout{
@@ -72,7 +78,8 @@
 }
 
 #search-bar-div{
-    margin-top:40px;
+    margin-top:30px;
+    display: flex;
 }
 
 #new-message-title{
@@ -89,6 +96,12 @@
 #new-message-button{
     height:36.75px;
     width:100%;
+    border-radius: 15px;
+    background: linear-gradient(45deg, #599ba5 5%, #4fa49a 30%, #4361c2);
+    border-color: #4361c2;
+    color :white;
+    font-size: 20px;
+    cursor: pointer;
 }
 
 textarea{
@@ -103,6 +116,23 @@ textarea{
     width:25%;
 }
 
+.content-div-logo{
+    display: flex; margin-top: 10px; cursor: pointer;
+}
+
+#search-logo{
+    cursor:pointer;
+}
+
+#logo-name{
+    width:100px;
+    height: 70px;
+    margin:0;
+    vertical-align: middle;
+    display: table-cell;
+    font-size: 40px;
+}
+
 .user-message{
     float: left;
     display: block;
@@ -111,5 +141,33 @@ textarea{
 .date-message{
     float: right;
     display: block;
+}
+
+.list-item-top{
+    display:flex; width: 100%; margin-top: 10px; margin-bottom: 10px;
+}
+
+.list-item-top-span{
+    width: 50%;
+}
+
+.list-item-mid{
+    margin-top: 10px; margin-bottom: 10px;
+}
+
+.contenu-message{
+    margin: 0; width: 100%;
+}
+
+.show-com{
+    cursor: pointer;
+}
+
+.commentaire-item-top{
+    display:flex; width: 90%; margin-top: 10px; margin-bottom: 10px; margin-left: 10%;
+}
+
+.commentaire-item-bottom{
+    margin-top: 10px; margin-bottom: 10px; width: 90%; margin-left: 10%;
 }
 
