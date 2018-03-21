@@ -24,10 +24,10 @@
                         <img id="search-logo" src="photos/search.png" alt="Logo" height="30" width="30">
                     </div>
                 </div>
-                <div class="sidediv">
+                <div id="log" class="sidediv">
                     <div class="content-div" id="user-bar">
                         <p>Connecté : Geron</p>
-                        <a href="" id="logout">Deconnexion</a>
+                        <a class="login_page" id="logout">Deconnexion</a>
                     </div>
 
                 </div>
@@ -86,6 +86,53 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div id="register" class="access">
+                <h1>S'enregistrer</h1>
+                <form method="POST" action="javascript:signup()">
+                    <label>Prénom</label>
+                    <input type="text" name="f_name"/>
+                    <label>Nom</label>
+                    <input type="text" name="l_name"/>
+                    <label>Login</label>
+                    <input type="text" name="login"/>
+                    <label>Email</label>
+                    <input type="text" name="email"/>
+                    <label>Mot de Passe</label>
+                    <input type="password" name="password"/>
+                    <label>Retaper le mot de passe</label>
+                    <input type="password" name="confirmPassword"/>
+
+                    <input id="register_button_register" type="submit" value="S'enregistrer"/>
+                    <input class="button_cancel" type="button" value="Annuler">
+                    <div style="text-align: center;">
+                        <span class="login_page" style="cursor: pointer;">Déjà inscrit? Se connecter</span>
+                    </div>
+
+                </form>
+            </div>
+            <div id="login" class="access">
+                <h1>Ouvrir une session</h1>
+                <form method="POST" action="javascript:connexion()">
+                    <label>Login</label>
+                    <input type="text" name="login"/>
+                    <label>Mot de Passe</label>
+                    <input type="password" name="password"/>
+                    <input id="login_connexion" type="submit" value="Connexion"/>
+                    <div>
+                        <span id="lost_password" href="">Mot de passe Perdu</span>
+                        <span id="notregister">Pas Encore inscrit?</span>
+                    </div>
+                </form>
+            </div>
+            <div id="password_lost" class="access">
+                <h1>Mot de passe perdu</h1>
+                <form method="POST" action="javascript:connexion()">
+                    <label>Email</label>
+                    <input type="text" name="email"/>
+                    <input id="password_lost_validate" type="submit" value="Valider"/>
+                    <input class="button_cancel" type="button" value="Annuler">
+                </form>
             </div>
         </main>
     </body>
