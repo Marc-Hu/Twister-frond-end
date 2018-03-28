@@ -28,11 +28,6 @@ $(document).ready(function() {
         }
     });
 
-    $('#password_lost_validate').click(function(e){
-       $('#password_lost').hide();
-       showLogin();
-    });
-
     /**
      * Clique sur le bouton annuler de la page register
      */
@@ -42,6 +37,7 @@ $(document).ready(function() {
     });
 
     $('#lost_password').click(function(e){
+        setPasswordLostDefaultPanel();
         $('#login').hide();
         $('#password_lost').show();
     });

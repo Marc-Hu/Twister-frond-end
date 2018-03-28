@@ -27,4 +27,39 @@ $(document).ready(function() {
         setLoginDefaultPanel()
         showLogin()
     });
+
+    /**
+     * Lorsqu'une touche est pressé par l'utilisateur dans le champs email de la page mot de passe perdu
+     */
+    $('#lost_password_input').keyup(function(){
+        // console.log("Appuie sur une touche")
+        $('#password_lost_validate').prop("disabled", true);
+        var email = $(this).val();
+        $(this).addClass("touched");
+        // console.log(email)
+        if( email.length==0 && $(this).hasClass("touched")){
+            $('#msg_err_password_lost').text("Email obligatoire")
+        }else if (!verifEmail(email)){
+            $('#msg_err_password_lost').text("Email invalide")
+        }else{
+            $('#msg_err_password_lost').text("")
+            $('#password_lost_validate').prop("disabled", false);
+        }
+    })
+
+    /**
+     * Lorsqu'on clique sur le bouton envoyer de la page du mot de passe perdu
+     */
+    $('#password_lost_validate').click(function(e){
+        // console.log("L'email est valide!!")
+        var email = $('#lost_password_input').val(); //récup val
+        var result = passwordLost(email); //Envoie requete au serveur
+        if(result){ //Si c'est bon
+            alert("Un email a été envoyé à l'adresse mail indiqué.");
+            $('#password_lost').hide();
+            showLogin();
+        }else{
+            $('#msg_err_password_lost').text("L'email n'existe pas dans notre base")
+        }
+    });
 });

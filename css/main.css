@@ -237,6 +237,7 @@ body{
     cursor: pointer;
 }
 
+#msg_err_password_lost,
 #msg-err-register,
 #msg-err-login{
     color: red;

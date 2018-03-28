@@ -10,19 +10,33 @@ function setLoginDefaultPanel(){
     $('#login_connexion').prop("disabled", true)
 }
 
+/**
+ * Fonction qui va remettre par défaut la page de l'inscription
+ */
 function setRegisterDefaultPanel(){
+    //Il va d'abord mettre toutes les valeurs à vide
     $('#register_name').val("");
     $('#register_surname').val("");
     $('#register_login').val("");
     $('#register_email').val("");
     $('#register_password').val("");
     $('#register_repeat').val("");
+    //Il va ensuite enlever toutes les classes ajouter
     $('#register_name').removeClass("touched");
     $('#register_surname').removeClass("touched");
     $('#register_login').removeClass("touched");
     $('#register_email').removeClass("touched");
     $('#register_password').removeClass("touched");
     $('#register_repeat').removeClass("touched");
+    //Le message d'erreur sera vide
     $('#msg-err-register').text("");
+    //Et il desactive le bouton pour s'inscrire
     $('#register_button_register').prop("disabled", true)
+}
+
+function setPasswordLostDefaultPanel(){
+    $('#lost_password_input').val("");
+    $('#lost_password_input').removeClass("touched");
+    $('#msg_err_password_lost').text("")
+    $('#password_lost_validate').prop("disabled", true);
 }

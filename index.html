@@ -135,9 +135,10 @@
             <div id="password_lost" class="access">
                 <h1>Mot de passe perdu</h1>
                 <form method="POST" action="javascript:connexion()">
+                    <p id="msg_err_password_lost"></p>
                     <label>Email</label>
-                    <input type="text" name="email"/>
-                    <input id="password_lost_validate" type="submit" value="Valider"/>
+                    <input type="text" name="email" id="lost_password_input"/>
+                    <input id="password_lost_validate" type="submit" value="Envoyer" disabled/>
                     <input class="button_cancel" type="button" value="Annuler">
                 </form>
             </div>
