@@ -242,3 +242,30 @@ body{
 #msg-err-login{
     color: red;
  }
+
+.add_comment_button{
+    border-radius: 5px;
+    background-color: cadetblue;
+    border-color: #4361c2;
+    color :white;
+    font-size: 20px;
+    width:20%;
+    cursor: pointer;
+    margin-left:3%;
+}
+
+.div_new_comment{
+    display: flex;
+}
+
+.add_comment{
+    width:70%;
+}
+
+#new-message-button{
+    border-radius: 15px;
+    background: linear-gradient(45deg, #599ba5 5%, #4fa49a 30%, #4361c2);
+    border-color: #4361c2;
+    color :white;
+    font-size: 20px
+}

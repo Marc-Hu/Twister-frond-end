@@ -84,6 +84,8 @@ function init(){
     $('.commentaire-item').hide();
     $('#register').hide();
     $('#password_lost').hide();
+    $('.add_comment').val("");//Bug des textarea, par défaut il y a plein d'espace et on ne voit pas le placeholder
+    $('#new-message').val("");//Pareil que celui au dessus
     // $('#login').hide()
     showLogin()
     getjsonData();

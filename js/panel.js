@@ -34,9 +34,16 @@ function setRegisterDefaultPanel(){
     $('#register_button_register').prop("disabled", true)
 }
 
+/**
+ * Fonction qui va remttre par défaut la page du mot de passe perdu
+ */
 function setPasswordLostDefaultPanel(){
     $('#lost_password_input').val("");
     $('#lost_password_input').removeClass("touched");
     $('#msg_err_password_lost').text("")
     $('#password_lost_validate').prop("disabled", true);
+}
+
+function addComment(comment_parent){
+    
 }
