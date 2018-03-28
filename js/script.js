@@ -1,32 +1,7 @@
 
 $(document).ready(function() {
 
-    var list_message=new Array(0);
     init()
-
-    /**
-     * Fonction qui va initialiser
-     */
-    function init(){
-        $('.commentaire-item').hide();
-        $('#register').hide();
-        $('#password_lost').hide();
-        // $('#login').hide()
-        showLogin()
-        getjsonData();
-    }
-
-    /**
-     * Fonction qui va afficher la page de login et cacher le reste
-     */
-    function showLogin(){
-        $('#register').hide();
-        $('#middlediv').hide();
-        $('#log').hide();
-        $('.maindiv').hide();
-        $('#password_lost').hide();
-        $('#login').show();
-    }
 
     /**
      * Dans la page de login, click sur le bouton "Pas encore inscrit"
@@ -40,28 +15,22 @@ $(document).ready(function() {
      * Appuie sur le bouton se connecter dans la page login
      */
     $('#login_connexion').click(function(e){
-        $('#login').hide();
-        showMainPage()
-    });
-
-    /**
-     * Bouton déconnexion de la barre
-     */
-    $('.login_page').click(function(e){
-        showLogin()
+        // console.log($('#login_name'))
+        var login = $('.login_input')[0].value
+        var password = $('.login_input')[1].value
+        // console.log(login+" "+password)
+        var connected = connection(login, password)
+        if(connected){
+            $('#login').hide();
+            showMainPage()
+        }else{
+            $('#msg-err-login').text("Nom d'utilisateur ou mot de passe erroné");
+        }
     });
 
     $('#password_lost_validate').click(function(e){
        $('#password_lost').hide();
        showLogin();
-    });
-
-    /**
-     * Click sur le bouton s'enregistrer de la page register
-     */
-    $('#register_button_register').click(function(e){
-        $('#register').hide();
-        showMainPage()
     });
 
     /**
@@ -76,12 +45,6 @@ $(document).ready(function() {
         $('#login').hide();
         $('#password_lost').show();
     });
-
-    function showMainPage(){
-        $('#middlediv').show();
-        $('#log').show();
-        $('.maindiv').show();
-    }
 
     $('.show-com').click(function(e) {
         console.log("Appuie sur le bouton commentaire");
@@ -114,46 +77,77 @@ $(document).ready(function() {
         }
     });
 
-    function getjsonData(){
-        $.getJSON( "json/message.json", function( data ){
-            console.log(data);
-            $.each( data, function( i, item ) {
-                console.log(i+" "+item["username"]);
-                var comments=[];
-                item["commentaire"].forEach(function(element) {
-                    console.log(element);
-                    comments.push(new Commentaire(element.id, element.username, element.message, element.date));
-                });
-                list_message.push(new Message(item["id"], item["username"], item["message"], item["date"], comments));
-            });
-            console.log(list_message);
-            refresh_message_data()
-        });
-
-    }
-
-    function Message(id, auteur, texte, date, comments){
-        this.id=id;
-        this.auteur=auteur;
-        this.texte=texte;
-        this.date=date;
-        this.comments=comments;
-    }
-
-    Message.prototype.getHtml=function(){
-      var s="Test";
-      return s;
-    };
-
-    function Commentaire(id, auteur, texte, date){
-        this.id=id;
-        this.auteur=auteur;
-        this.texte=texte;
-        this.date=date;
-    }
-
-    function refresh_message_data(){
-        console.log(list_message[0].getHtml());
-    }
-
 });
+
+var list_message=new Array(0);
+
+/**
+ * Fonction qui va initialiser
+ */
+function init(){
+    $('.commentaire-item').hide();
+    $('#register').hide();
+    $('#password_lost').hide();
+    // $('#login').hide()
+    showLogin()
+    getjsonData();
+}
+
+/**
+ * Fonction qui va afficher la page de login et cacher le reste
+ */
+function showLogin(){
+    $('#register').hide();
+    $('#middlediv').hide();
+    $('#log').hide();
+    $('.maindiv').hide();
+    $('#password_lost').hide();
+    $('#login').show();
+}
+
+function showMainPage(){
+    $('#middlediv').show();
+    $('#log').show();
+    $('.maindiv').show();
+}
+
+function Message(id, auteur, texte, date, comments){
+    this.id=id;
+    this.auteur=auteur;
+    this.texte=texte;
+    this.date=date;
+    this.comments=comments;
+}
+
+Message.prototype.getHtml=function(){
+    var s="Test";
+    return s;
+};
+
+function Commentaire(id, auteur, texte, date){
+    this.id=id;
+    this.auteur=auteur;
+    this.texte=texte;
+    this.date=date;
+}
+
+function refresh_message_data(){
+    console.log(list_message[0].getHtml());
+}
+
+function getjsonData(){
+    $.getJSON( "json/message.json", function( data ){
+        console.log(data);
+        $.each( data, function( i, item ) {
+            console.log(i+" "+item["username"]);
+            var comments=[];
+            item["commentaire"].forEach(function(element) {
+                console.log(element);
+                comments.push(new Commentaire(element.id, element.username, element.message, element.date));
+            });
+            list_message.push(new Message(item["id"], item["username"], item["message"], item["date"], comments));
+        });
+        console.log(list_message);
+        refresh_message_data()
+    });
+}

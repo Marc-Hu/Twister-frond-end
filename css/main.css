@@ -236,3 +236,8 @@ body{
 #lost_password{
     cursor: pointer;
 }
+
+#msg-err-register,
+#msg-err-login{
+    color: red;
+ }
