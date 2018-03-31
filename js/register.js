@@ -81,6 +81,9 @@ function verifEmail(email){
     return regex_email.test(email);
 }
 
+/**
+ * Fonction qui va mettre les données dans la page du profil de la personne connecté
+ */
 function getMyProfile(){
     var profile = getProfile();
     console.log(profile);
@@ -88,4 +91,5 @@ function getMyProfile(){
     $('#myprofile_username').text(profile.username);
     $('#myprofile_lastname').text(profile.lastname);
     $('#myprofile_firstname').text(profile.firstname);
+    localStorage.setItem("user_id", profile.id); //On sauvegarde l'id car on en aura besoin
 }

@@ -1,5 +1,8 @@
 $(document).ready(function() {
 
+    /**
+     * Lorsqu'une touche est frappé dans la formulaire de login
+     */
     $('.login_input').keyup(function(){
         $('#login_connexion').prop("disabled", true) //Boutton Se connecter est disable
         var login = $('.login_input')[0].value; //Récup des valeurs de login

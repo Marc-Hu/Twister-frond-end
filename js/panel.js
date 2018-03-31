@@ -44,12 +44,18 @@ function setPasswordLostDefaultPanel(){
     $('#password_lost_validate').prop("disabled", true);
 }
 
+/**
+ * Fonction qui va remettre par défaut le panel des profils
+ */
 function setProfileDefaultPanel(){
     $('.profile_username').text("");
     $('#profile_lastname').text("");
     $('#profile_firstname').text("");
 }
 
+/**
+ * Fonction qui va remettre par défaut le panel de notre profil (appeler lors de la déconnexion)
+ */
 function setMyProfileDefaultPanel(){
     $('#myprofile_username').text("");
     $('#myprofile_lastname').text("");

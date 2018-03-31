@@ -44,7 +44,12 @@
 
             <div class="maindiv" style="">
                 <div id="stats">
-                    Zone Statistique
+                    <p>Nombre de personne connecté : <span></span></p>
+                    <br>
+                    <p>Mes follows :</p>
+                    <div id="list_followed">
+
+                    </div>
                 </div>
                 <div id="list-messages">
                     <div id="nouveau-message" class="messages">
@@ -157,8 +162,8 @@
                 <h1>Profile de <span class="profile_username"></span></h1>
                 <p>Nom : <span id="profile_lastname"></span></p>
                 <p>Prénom : <span id="profile_firstname"></span></p>
-                <input type="submit" value="Suivre"/>
-                <input class="button_cancel" type="button" value="Ne plus suivre">
+                <input id="follow" type="submit" value="Suivre"/>
+                <input id="unfollow" type="button" value="Ne plus suivre">
             </div>
             <div id="myprofile" class="access">
                 <h1>Mon profil</h1>
