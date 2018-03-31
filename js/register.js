@@ -76,14 +76,14 @@ function verifField(name, surname, login, email, password, repeat){
     return name.length!=0 && surname.length!=0 && login.length!=0 && email.length!=0 && password.length!=0 && repeat.length!=0 && password==repeat && regex_email.test(email.toLowerCase());
 }
 
-//Foncton qui va vérifier si l'email dans le champs est un email valide
+//Fonction qui va vérifier si l'email dans le champs est un email valide
 function verifEmail(email){
     return regex_email.test(email);
 }
 
 function getMyProfile(){
     var profile = getProfile();
-    // console.log(profile);
+    console.log(profile);
     $('#profile_username_board').text(profile.username);
     $('#myprofile_username').text(profile.username);
     $('#myprofile_lastname').text(profile.lastname);

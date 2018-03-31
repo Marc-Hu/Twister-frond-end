@@ -60,10 +60,31 @@ $(document).ready(function() {
        $(this).css({"margin-left": "10%", transition: "margin-left 1s"});
     });
 
+    $('#bar-recherche').keyup(function(e){
+        var val = $('#bar-recherche')[0].value;
+        // console.log(val);
+        $('#browsers').empty();
+        if(val.length!=0){
+            addListToSearchBar(getUserList(val).list);
+        }
+    });
+
+    $('#search-logo').click(function(){
+        var username = $('#bar-recherche')[0].value;
+        var user_profile = getProfileByUsername(username);
+        if(user_profile.hasOwnProperty("firstname")){
+            setUserProfile(user_profile);
+            hideAll();
+            $('#profile').show();
+            $('#middlediv').show();
+            $('#log').show();
+        }
+    });
+
     //Si on clique quelque part dans la page
     $("body").click(function(e){
-        // console.log(e.target.attributes[0])
-        if(e.target.attributes[0]==undefined || e.target.attributes[0].value!="bar-recherche"){
+        console.log(e.target.attributes[0])
+        if(e.target.attributes[0]==undefined || e.target.attributes[0].value!="bar-recherche" && e.target.attributes[0].value!="browsers"){
             var bar_recherche=parseInt($('#bar-recherche').css("width"));
             var parent_bar_recherche=parseInt($('#bar-recherche').parent().css("width"))/2;
             // console.log("Valeur du width de la barre de recherche : "+bar_recherche+" Valeur width parent :"+parent_bar_recherche);
@@ -179,4 +200,18 @@ function getjsonData(){
         console.log(list_message);
         refresh_message_data()
     });
+}
+
+function addListToSearchBar(list){
+    var item = null;
+    list.forEach(function(e){
+        item="<option value=\""+e.username+"\">";
+        $('#browsers').append(item);
+    });
+}
+
+function setUserProfile(user){
+    $('.profile_username').text(user.username);
+    $('#profile_lastname').text(user.lastname);
+    $('#profile_firstname').text(user.firstname);
 }

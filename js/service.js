@@ -74,11 +74,21 @@ function logout(){
 function getProfile(){
     var username = localStorage.getItem("user-username");
     var url = "http://localhost:8080/Twister/user/profile?username="+username;
-    // console.log(url);
+    console.log(url);
+    return createRequest(url);
+}
+
+function getProfileByUsername(username){
+    var url = "http://localhost:8080/Twister/user/profile?username="+username;
     return createRequest(url);
 }
 
 function isLogged(){
     // console.log(!!localStorage.getItem("user-key"))
     return !!localStorage.getItem("user-key")
+}
+
+function getUserList(username){
+    var url = "http://localhost:8080/Twister/user/list?username="+username;
+    return createRequest(url);
 }
