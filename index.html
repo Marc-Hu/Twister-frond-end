@@ -15,7 +15,7 @@
     <body>
         <header>
             <div class="head">
-                <div class="sidediv">
+                <div class="sidediv" id="home_page">
                     <div class="content-div content-div-logo">
                         <img src="photos/logo.png" alt="Logo" height="70" width="70">
                         <div>
@@ -31,7 +31,7 @@
                 </div>
                 <div id="log" class="sidediv">
                     <div class="content-div" id="user-bar">
-                        <p>Connecté : Geron</p>
+                        <p id="user">Connecté : <span id="profile_username_board"></span></p>
                         <a class="login_page" id="logout">Deconnexion</a>
                     </div>
 
@@ -150,6 +150,19 @@
                     <input id="password_lost_validate" type="submit" value="Envoyer" disabled/>
                     <input class="button_cancel" type="button" value="Annuler">
                 </form>
+            </div>
+            <div id="profile" class="access">
+                <h1>Profile de <span class="profile_username"></span></h1>
+                <p>Nom : <span id="profile_lastname"></span></p>
+                <p>Prénom : <span id="profile_firstname"></span></p>
+                <input type="submit" value="Suivre"/>
+                <input class="button_cancel" type="button" value="Ne plus suivre">
+            </div>
+            <div id="myprofile" class="access">
+                <h1>Mon profil</h1>
+                <p>Pseudo : <span id="myprofile_username"></span></p>
+                <p>Nom : <span id="myprofile_lastname"></span></p>
+                <p>Prénom : <span id="myprofile_firstname"></span></p>
             </div>
         </main>
     </body>

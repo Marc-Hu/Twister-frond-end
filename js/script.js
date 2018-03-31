@@ -7,7 +7,7 @@ $(document).ready(function() {
      * Dans la page de login, click sur le bouton "Pas encore inscrit"
      */
     $('#notregister').click(function(e){
-        $('#login').hide();
+        hideAll();
         $('#register').show()
     });
 
@@ -16,11 +16,12 @@ $(document).ready(function() {
      */
     $('#login_connexion').click(function(e){
         // console.log($('#login_name'))
-        var login = $('.login_input')[0].value
-        var password = $('.login_input')[1].value
+        var login = $('.login_input')[0].value;
+        var password = $('.login_input')[1].value;
         // console.log(login+" "+password)
-        var connected = connection(login, password)
+        var connected = connection(login, password);
         if(connected){
+            getMyProfile()
             $('#login').hide();
             showMainPage()
         }else{
@@ -73,6 +74,25 @@ $(document).ready(function() {
         }
     });
 
+    $('#logout').click(function(e){
+        logout();
+        setMyProfileDefaultPanel()
+        setProfileDefaultPanel()
+        // console.log(res);
+    });
+
+    $('#user').click(function(){
+       hideAll();
+        $('#myprofile').show();
+        $('#middlediv').show();
+        $('#log').show();
+    });
+
+    $('#home_page').click(function(){
+       hideAll();
+       showMainPage();
+    });
+
 });
 
 var list_message=new Array(0);
@@ -81,25 +101,24 @@ var list_message=new Array(0);
  * Fonction qui va initialiser
  */
 function init(){
-    $('.commentaire-item').hide();
-    $('#register').hide();
-    $('#password_lost').hide();
     $('.add_comment').val("");//Bug des textarea, par défaut il y a plein d'espace et on ne voit pas le placeholder
     $('#new-message').val("");//Pareil que celui au dessus
-    // $('#login').hide()
-    showLogin()
-    getjsonData();
+    hideAll();
+    if(!isLogged()){
+        // $('#login').hide()
+        showLogin();
+    }else{
+        $('#login').hide();
+        showMainPage();
+        getMyProfile();
+    }
 }
 
 /**
  * Fonction qui va afficher la page de login et cacher le reste
  */
 function showLogin(){
-    $('#register').hide();
-    $('#middlediv').hide();
-    $('#log').hide();
-    $('.maindiv').hide();
-    $('#password_lost').hide();
+    hideAll();
     $('#login').show();
 }
 
@@ -107,6 +126,18 @@ function showMainPage(){
     $('#middlediv').show();
     $('#log').show();
     $('.maindiv').show();
+}
+
+function hideAll(){
+    $('#register').hide();
+    $('#middlediv').hide();
+    $('#log').hide();
+    $('.maindiv').hide();
+    $('#password_lost').hide();
+    $('#profile').hide();
+    $('#myprofile').hide();
+    $('#login').hide();
+    $('.commentaire-item').hide();
 }
 
 function Message(id, auteur, texte, date, comments){

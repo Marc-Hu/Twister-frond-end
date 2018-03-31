@@ -44,6 +44,18 @@ function setPasswordLostDefaultPanel(){
     $('#password_lost_validate').prop("disabled", true);
 }
 
+function setProfileDefaultPanel(){
+    $('.profile_username').text("");
+    $('#profile_lastname').text("");
+    $('#profile_firstname').text("");
+}
+
+function setMyProfileDefaultPanel(){
+    $('#myprofile_username').text("");
+    $('#myprofile_lastname').text("");
+    $('#myprofile_firstname').text("");
+}
+
 function addComment(comment_parent){
     
 }
