@@ -114,6 +114,7 @@ function getProfile(){
             $('#myprofile_lastname').text(data.lastname);
             $('#myprofile_firstname').text(data.firstname);
             localStorage.setItem("user_id", data.id);
+            showMainPage();
         }else{
             console.log("error");
         }
