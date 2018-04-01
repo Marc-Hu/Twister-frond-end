@@ -20,6 +20,7 @@ $(document).ready(function() {
         var password = $('.login_input')[1].value;
         // console.log(login+" "+password)
         var connected = connection(login, password);
+        console.log(connected)
         if(connected){
             getMyProfile()
             $('#login').hide();
@@ -74,7 +75,7 @@ $(document).ready(function() {
         // console.log(val);
         $('#browsers').empty();
         if(val.length!=0){ //Si la valeur n'est pas vide
-            addListToSearchBar(getUserList(val).list); //On cherche tous les users qui ont cette valeur dans leur username
+            getUserList(val)
         }
     });
 
@@ -83,15 +84,7 @@ $(document).ready(function() {
      */
     $('#search-logo').click(function(){
         var username = $('#bar-recherche')[0].value; //Récup la valeur dans la barre de recherche
-        var user_profile = getProfileByUsername(username); //Récupère le profil de la personne recherché
-        if(user_profile.hasOwnProperty("firstname")){ //Si l'utilisateur existe
-            current_user=user_profile; //On met dans une var globale l'utilisateur
-            setUserProfile(user_profile);//On va mettre à jour la page des profils
-            hideAll(); //On cache tout
-            $('#profile').show(); //Et on ne montre que la page concerné
-            $('#middlediv').show();
-            $('#log').show();
-        }
+        getProfileByUsernameForSearch(username);
     });
 
     //Si on clique quelque part dans la page
@@ -144,12 +137,7 @@ $(document).ready(function() {
         var follow_id = current_user.id; //Récupère l'id du profil courant
         // console.log(key, follow_id);
         // console.log(follow(key, follow_id));
-        var result =  follow(key, follow_id); //Appel du service
-        if(result.code==200){ //Si c'est bon
-            alert("Vous suivez désormais "+current_user.username);
-        }else{ //Sinon
-            alert("Vous suivez déjà cette personne.");
-        }
+        follow(key, follow_id); //Appel du service
     });
 
     /**
@@ -158,17 +146,11 @@ $(document).ready(function() {
     $('#unfollow').click(function(){
         var key = localStorage.getItem("user-key");
         var follow_id = current_user.id;
-        var result =  unfollow(key, follow_id);
-        if(result.code==200){
-            alert("Vous ne suivez plus "+current_user.username);
-        }else{
-            alert("Vous ne pouvez pas faire ça.");
-        }
+        unfollow(key, follow_id);
     });
-
 });
-
-var list_message=new Array(0);
+var list_follow=new Array(0);
+var current_user=null;
 
 /**
  * Fonction qui va initialiser
@@ -184,11 +166,8 @@ function init(){
         $('#login').hide();
         showMainPage();
         getMyProfile();//Récupère et rempli la page mon profil
-        setListFollowed(getListFollowed());//Récupère et affiche la liste des follow
     }
 }
-
-var current_user=null;
 
 /**
  * Fonction qui va afficher la page de login et cacher le reste
@@ -205,7 +184,7 @@ function showMainPage(){
     $('#middlediv').show();
     $('#log').show();
     $('.maindiv').show();
-    setListFollowed(getListFollowed())
+    getListFollowed();
 }
 
 /**
@@ -221,48 +200,6 @@ function hideAll(){
     $('#myprofile').hide();
     $('#login').hide();
     $('.commentaire-item').hide();
-}
-
-
-function Message(id, auteur, texte, date, comments){
-    this.id=id;
-    this.auteur=auteur;
-    this.texte=texte;
-    this.date=date;
-    this.comments=comments;
-}
-
-Message.prototype.getHtml=function(){
-    var s="Test";
-    return s;
-};
-
-function Commentaire(id, auteur, texte, date){
-    this.id=id;
-    this.auteur=auteur;
-    this.texte=texte;
-    this.date=date;
-}
-
-function refresh_message_data(){
-    // console.log(list_message[0].getHtml());
-}
-
-function getjsonData(){
-    $.getJSON( "json/message.json", function( data ){
-        console.log(data);
-        $.each( data, function( i, item ) {
-            console.log(i+" "+item["username"]);
-            var comments=[];
-            item["commentaire"].forEach(function(element) {
-                console.log(element);
-                comments.push(new Commentaire(element.id, element.username, element.message, element.date));
-            });
-            list_message.push(new Message(item["id"], item["username"], item["message"], item["date"], comments));
-        });
-        console.log(list_message);
-        refresh_message_data()
-    });
 }
 
 /**
@@ -283,9 +220,21 @@ function addListToSearchBar(list){
  * @param user
  */
 function setUserProfile(user){
+    var found=false;
     $('.profile_username').text(user.username);
     $('#profile_lastname').text(user.lastname);
     $('#profile_firstname').text(user.firstname);
+    list_follow.forEach(function(e){
+        // console.log(e);
+        if(e.followed_username==user.username){
+            found=!found;
+            console.log("test");
+            showUnfollow();
+        }
+    });
+    if (!found){
+        showFollow();
+    }
 }
 
 /**
@@ -293,11 +242,38 @@ function setUserProfile(user){
  * Il va ajouter dans la page principal, tous les follow de la personne connecté
  * @param list
  */
-function setListFollowed(list){
+function setListFollowed(){
     $('#list_followed').empty();
     var item=null;
-    list.forEach(function(e){
-        item="<p>"+e.followed_username+"<p>"
+    list_follow.forEach(function(e){
+        item="<div class='followed_list_main' ><p>"+e.followed_username+
+            "<img id='userId_"+e.followed_id+"' class='unfollow_main' src=\"photos/cancel.png\" title='Ne plus suivre' height=\"30\" width=\"30\"></p><div>"
         $('#list_followed').append(item);
     })
+}
+
+function showFollow(){
+    $('#follow').show();
+    $('#unfollow').hide();
+}
+
+function showUnfollow(){
+    $('#follow').hide();
+    $('#unfollow').show();
+}
+
+function setListenerTofollow(){
+    $('.unfollow_main').click(function(e){
+        // console.log("testttt")
+        var username=$(this).parent().first().text();
+        // console.log($(this).parent().first().text());
+        var response = prompt("Etes-vous sûr de ne plus suivre "+username+'? [Oui/Non]', "");
+        // console.log(person);
+        if(response!=null && response.toLowerCase()=="oui"){
+            var key = localStorage.getItem("user-key"); //récupère la clé
+            var followed_id = $(this).attr('id').split("_")[1]; //Récupère l'id du followed grâce à son id qui est userId_X
+            // console.log(followed_id);
+            unfollow(key, followed_id); //Appel du service
+        }
+    });
 }

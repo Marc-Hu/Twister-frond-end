@@ -273,3 +273,12 @@ body{
 #user{
     cursor: pointer;
 }
+
+.unfollow_main{
+    float: right;
+    cursor: pointer;
+}
+
+.followed_list_main{
+    display:inline;
+}

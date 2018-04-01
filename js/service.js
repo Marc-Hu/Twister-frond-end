@@ -1,3 +1,4 @@
+var response = "";
 /**
  * Fonction qui va appeler l'API pour se connecter
  * @param username
@@ -7,16 +8,24 @@
 function connection(username, password){
     // console.log(username, password)
     var url = "http://localhost:8080/Twister/user/login?username="+username+"&password="+password;
-    var response = createRequest(url);
-    if (response.hasOwnProperty('key')){
-        // console.log(response);
-        localStorage.setItem("user-key", response.key); //Si l'utilisateur existe on ajoute la clé dans le localStorage
-        localStorage.setItem("user-username", username);
-        return true; //Retournera l'object JSON renvoyé par le serveur et non un boolean
-    }else{
-        alert(response.message);
-        return false;
-    }
+    // createRequest(url);
+    $.getJSON(url, function(data, status){
+        // console.log(1);
+    }).done(function(data){
+        // console.log(2, data);
+        if (data.hasOwnProperty('key')){
+            console.log("success connected");
+            // console.log(data);
+            localStorage.setItem("user-key", data.key); //Si l'utilisateur existe on ajoute la clé dans le localStorage
+            localStorage.setItem("user-username", username);
+            getMyProfile();
+            $('#login').hide();
+            showMainPage();
+        }else{
+            // alert(response.message);
+            $('#msg-err-login').text("Nom d'utilisateur ou mot de passe erroné");
+        }
+    })
 }
 
 /**
@@ -41,7 +50,18 @@ function removeUserKey(){
 function createUser(name, surname, login, email, password, repeat){
     // console.log(name, surname, login, email, password, repeat);
     var url = "http://localhost:8080/Twister/user/create?f_name="+name+"&l_name="+surname+"&username="+login+"&password="+password;
-    return createRequest(url);
+    $.getJSON(url, function(data, status){
+        // console.log(1);
+    }).done(function(data){
+        // console.log(2, data);
+        if(data.code==200){//Si la réponse est bonne (par la suite on mettra une condition sur le code de retour
+            console.log("success register")
+            connection(login, password);
+            $('#register').hide();
+        }else{ //Sinon
+            $('#msg-err-register').text("L'utilisateur existe déjà")// Sera modifié par la suite car on à le message de retour de l'API
+        }
+    })
 }
 
 /**
@@ -50,19 +70,26 @@ function createUser(name, surname, login, email, password, repeat){
  * @returns {any}
  */
 function createRequest(url){
-    var req = new XMLHttpRequest();
-    var response = null;
-    req.open('GET', url, false);
-    req.send(null);
-    if (req.status === 200) {
-        // console.log("Réponse reçue:", JSON.parse(req.responseText));
-        response=JSON.parse(req.responseText);
-    } else {
-        // console.log("Status de la réponse: %d (%s)", req.status, req.statusText, req.responseText);
-        response=JSON.parse(req.statusText);
-    }
-    // console.log(response)
-    return response;
+    // var req = new XMLHttpRequest();
+    // var response = null;
+    // req.open('GET', url, false);
+    // req.send(null);
+    // if (req.status === 200) {
+    //     // console.log("Réponse reçue:", JSON.parse(req.responseText));
+    //     response=JSON.parse(req.responseText);
+    // } else {
+    //     // console.log("Status de la réponse: %d (%s)", req.status, req.statusText, req.responseText);
+    //     response=JSON.parse(req.statusText);
+    // }
+    // // console.log(response)
+    // return response;
+    return $.getJSON(url, function(data, status){
+        console.log(data);
+        response=data;
+        // data = JSON.parse(data)
+        console.log("Data: " + data + "\nStatus: " + status);
+        return data;
+    });
 }
 
 function passwordLost(email){
@@ -78,7 +105,18 @@ function passwordLost(email){
 function logout(){
     var key = localStorage.getItem("user-key");
     var url = "http://localhost:8080/Twister/user/logout?key="+key;
-    return createRequest(url);
+    $.getJSON(url, function(data, status){
+        // console.log(1);
+    }).done(function(data){
+        // console.log(2, data);
+        if (data.code==200){
+            console.log("success logout");
+            setMyProfileDefaultPanel();//On va mettre les panels par défaut
+            setProfileDefaultPanel();
+        }else{
+            console.log("error");
+        }
+    });
 }
 
 /**
@@ -88,8 +126,21 @@ function logout(){
 function getProfile(){
     var username = localStorage.getItem("user-username");
     var url = "http://localhost:8080/Twister/user/profile?username="+username;
-    console.log(url);
-    return createRequest(url);
+    $.getJSON(url, function(data, status){
+        // console.log(1);
+    }).done(function(data){
+        console.log(2, data);
+        if (data.hasOwnProperty("username")){
+            console.log("success get profile")
+            $('#profile_username_board').text(data.username);
+            $('#myprofile_username').text(data.username);
+            $('#myprofile_lastname').text(data.lastname);
+            $('#myprofile_firstname').text(data.firstname);
+            localStorage.setItem("user_id", data.id);
+        }else{
+            console.log("error");
+        }
+    });
 }
 
 /**
@@ -99,7 +150,41 @@ function getProfile(){
  */
 function getProfileByUsername(username){
     var url = "http://localhost:8080/Twister/user/profile?username="+username;
-    return createRequest(url);
+    $.getJSON(url, function(data, status){
+        console.log(1, "getProfileByUsername");
+    }).done(function(data){
+        console.log(2, data);
+        if(data.hasOwnProperty("firstname")){ //Si l'utilisateur existe
+            console.log("Get profile by username success")
+            current_user=data; //On met dans une var globale l'utilisateur
+            setUserProfile(data);//On va mettre à jour la page des profils
+            hideAll(); //On cache tout
+            $('#profile').show(); //Et on ne montre que la page concerné
+            $('#middlediv').show();
+            $('#log').show();
+        }else{
+            console.log("error");
+        }
+    });
+}
+
+function getProfileByUsernameForSearch(username){
+    var url = "http://localhost:8080/Twister/user/profile?username="+username;
+    $.getJSON(url, function(data, status){
+        console.log(1, "getProfileByUsername");
+    }).done(function(data){
+        console.log(2, data);
+        if(data.hasOwnProperty("firstname")){ //Si l'utilisateur existe
+            current_user=data; //On met dans une var globale l'utilisateur
+            setUserProfile(data);//On va mettre à jour la page des profils
+            hideAll(); //On cache tout
+            $('#profile').show(); //Et on ne montre que la page concerné
+            $('#middlediv').show();
+            $('#log').show();
+        }else{
+            console.log("error");
+        }
+    });
 }
 
 /**
@@ -107,8 +192,8 @@ function getProfileByUsername(username){
  * @returns {boolean}
  */
 function isLogged(){
-    console.log(localStorage.getItem("user-key"))
-    return !!localStorage.getItem("user-key")
+    // console.log(localStorage.getItem("user-key"))
+    return !!localStorage.getItem("user-key") // Ne fonctioone pas sur IE en file://, fonctionne sur les site HTTP
 }
 
 /**
@@ -118,7 +203,16 @@ function isLogged(){
  */
 function getUserList(username){
     var url = "http://localhost:8080/Twister/user/list?username="+username;
-    return createRequest(url);
+    $.getJSON(url, function(data, status){
+        // console.log(1, "getUserList");
+    }).done(function(data){
+        // console.log(2, data);
+        if(data.list.length!=0){ //Si l'utilisateur existe
+            addListToSearchBar(data.list); //On cherche tous les users qui ont cette valeur dans leur username
+        }else{
+            console.log("No user");
+        }
+    });
 }
 
 /**
@@ -129,7 +223,17 @@ function getUserList(username){
  */
 function follow(from_key, to_id){
     var url = "http://localhost:8080/Twister/user/follow?key="+from_key+"&followedId="+to_id;
-    return createRequest(url);
+    $.getJSON(url, function(data, status){
+        // console.log(1, "getUserList");
+    }).done(function(data){
+        // console.log(2, data);
+        if(data.code==200){ //Si c'est bon
+            alert("Vous suivez désormais "+current_user.username);
+            showUnfollow();
+        }else{ //Sinon
+            alert("Vous suivez déjà cette personne.");
+        }
+    });
 }
 
 /**
@@ -140,14 +244,36 @@ function follow(from_key, to_id){
  */
 function unfollow(from_key, to_id){
     var url = "http://localhost:8080/Twister/user/unfollow?key="+from_key+"&followedId="+to_id;
-    return createRequest(url);
+    $.getJSON(url, function(data, status){
+        console.log(1, "unfollow");
+    }).done(function(data){
+        console.log(2, data);
+        if(data.code==200){
+            alert("Vous ne suivez plus cette personne");
+            showFollow();
+            getListFollowed()
+        }else{
+            alert("Vous ne pouvez pas faire ça.");
+        }
+    });
 }
 
 /**
- * Fonction qui permet de récupérer la liste des personne actuellement follow par la personne connecté
- * @returns {HTMLElement}
+ * Fonction qui permet de récupérer la liste des personne qu'on follow
  */
 function getListFollowed(){
     var url = "http://localhost:8080/Twister/user/listFollowed?id="+localStorage.getItem("user_id");
-    return createRequest(url).list;
+    console.log(url)
+    $.getJSON(url, function(data, status){
+        console.log(1, "getListFollowed");
+    }).done(function(data){
+        console.log(2, data);
+        if(data.list.length!=0){
+            list_follow=data.list;
+            setListFollowed();
+            setListenerTofollow();
+        }else{
+            console.log("error or empty list")
+        }
+    });
 }

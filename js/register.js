@@ -53,18 +53,7 @@ $(document).ready(function() {
         var password = $('.register_input')[4].value;
         var repeat = $('.register_input')[5].value;
         //On va créer un utilisateur
-        var response=createUser(name, surname, login, email, password, repeat);
-        if(response.code==200){//Si la réponse est bonne (par la suite on mettra une condition sur le code de retour
-            var connectionRes = connection(login, password);
-            if(connectionRes){
-                getMyProfile()
-                $('#register').hide();
-                showMainPage();
-                setRegisterDefaultPanel()
-            }
-        }else{ //Sinon
-            $('#msg-err-register').text("L'utilisateur existe déjà")// Sera modifié par la suite car on à le message de retour de l'API
-        }
+        createUser(name, surname, login, email, password, repeat);
     });
 
 });
@@ -85,11 +74,11 @@ function verifEmail(email){
  * Fonction qui va mettre les données dans la page du profil de la personne connecté
  */
 function getMyProfile(){
-    var profile = getProfile();
-    console.log(profile);
-    $('#profile_username_board').text(profile.username);
-    $('#myprofile_username').text(profile.username);
-    $('#myprofile_lastname').text(profile.lastname);
-    $('#myprofile_firstname').text(profile.firstname);
-    localStorage.setItem("user_id", profile.id); //On sauvegarde l'id car on en aura besoin
+    getProfile();
+    // console.log(profile);
+    // $('#profile_username_board').text(profile.username);
+    // $('#myprofile_username').text(profile.username);
+    // $('#myprofile_lastname').text(profile.lastname);
+    // $('#myprofile_firstname').text(profile.firstname);
+    // localStorage.setItem("user_id", profile.id); //On sauvegarde l'id car on en aura besoin
 }
