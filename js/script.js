@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
 
     init()
@@ -108,6 +107,7 @@ $(document).ready(function() {
         logout();
         setMyProfileDefaultPanel();//On va mettre les panels par défaut
         setProfileDefaultPanel();
+        setSweetDefaultPanel();
         // console.log(res);
     });
 
@@ -148,6 +148,13 @@ $(document).ready(function() {
         var follow_id = current_user.id;
         unfollow(key, follow_id);
     });
+
+    $('#new-message-button').click(function(){
+        // console.log($('#new-message').val());
+        var sweet = $('#new-message').val();
+        addSweet(sweet)
+    });
+
 });
 var list_follow=new Array(0);
 var current_user=null;
@@ -246,22 +253,31 @@ function setListFollowed(){
     $('#list_followed').empty();
     var item=null;
     list_follow.forEach(function(e){
-        item="<div class='followed_list_main' ><p>"+e.followed_username+
-            "<img id='userId_"+e.followed_id+"' class='unfollow_main' src=\"photos/cancel.png\" title='Ne plus suivre' height=\"30\" width=\"30\"></p><div>"
+        item="<div class='followed_list_main' ><p><span class='followed_username'>"+e.followed_username+
+            "</span><img id='userId_"+e.followed_id+"' class='unfollow_main' src=\"photos/cancel.png\" title='Ne plus suivre' height=\"30\" width=\"30\"></p><div>"
         $('#list_followed').append(item);
     })
 }
 
+/**
+ * Fonction qui va afficher le bouton 'Suivre' dans la page des profiles
+ */
 function showFollow(){
     $('#follow').show();
     $('#unfollow').hide();
 }
 
+/**
+ * Fonction qui va afficher le bouton 'ne plus suivre' dans la page des profiles
+ */
 function showUnfollow(){
     $('#follow').hide();
     $('#unfollow').show();
 }
 
+/**
+ * Des listeners qu'on va ajouter quand on va ajouter la liste des follow dans la page main
+ */
 function setListenerTofollow(){
     $('.unfollow_main').click(function(e){
         // console.log("testttt")
@@ -276,4 +292,9 @@ function setListenerTofollow(){
             unfollow(key, followed_id); //Appel du service
         }
     });
+    $(".followed_username").click(function(e){
+        // console.log($(this).text());
+        var username = $(this).text();
+        getProfileByUsername(username);
+    })
 }

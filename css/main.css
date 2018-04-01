@@ -270,6 +270,7 @@ body{
     font-size: 20px
 }
 
+.followed_username,
 #user{
     cursor: pointer;
 }

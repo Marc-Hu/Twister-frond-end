@@ -1,4 +1,4 @@
-var response = "";
+
 /**
  * Fonction qui va appeler l'API pour se connecter
  * @param username
@@ -65,33 +65,10 @@ function createUser(name, surname, login, email, password, repeat){
 }
 
 /**
- * Fonction qui va faire l'appel à l'API
- * @param url Url ou on veut faire l'appel
- * @returns {any}
+ * A faire si il y a le temps; Fonction qui récupère le mot de passe d'une personne
+ * @param email
+ * @returns {boolean}
  */
-function createRequest(url){
-    // var req = new XMLHttpRequest();
-    // var response = null;
-    // req.open('GET', url, false);
-    // req.send(null);
-    // if (req.status === 200) {
-    //     // console.log("Réponse reçue:", JSON.parse(req.responseText));
-    //     response=JSON.parse(req.responseText);
-    // } else {
-    //     // console.log("Status de la réponse: %d (%s)", req.status, req.statusText, req.responseText);
-    //     response=JSON.parse(req.statusText);
-    // }
-    // // console.log(response)
-    // return response;
-    return $.getJSON(url, function(data, status){
-        console.log(data);
-        response=data;
-        // data = JSON.parse(data)
-        console.log("Data: " + data + "\nStatus: " + status);
-        return data;
-    });
-}
-
 function passwordLost(email){
     console.log(email);
     //Appel à l'API pour retrouver le mdp
@@ -168,6 +145,10 @@ function getProfileByUsername(username){
     });
 }
 
+/**
+ * Fonction qui va récupérer le profile d'une personne selon son username (login) pour la barre de recherche
+ * @param username
+ */
 function getProfileByUsernameForSearch(username){
     var url = "http://localhost:8080/Twister/user/profile?username="+username;
     $.getJSON(url, function(data, status){
@@ -263,7 +244,7 @@ function unfollow(from_key, to_id){
  */
 function getListFollowed(){
     var url = "http://localhost:8080/Twister/user/listFollowed?id="+localStorage.getItem("user_id");
-    console.log(url)
+    // console.log(url)
     $.getJSON(url, function(data, status){
         console.log(1, "getListFollowed");
     }).done(function(data){
@@ -272,8 +253,94 @@ function getListFollowed(){
             list_follow=data.list;
             setListFollowed();
             setListenerTofollow();
+            getSweet(data.list);
         }else{
             console.log("error or empty list")
+        }
+    });
+}
+
+/**
+ * Fonction qui va ajouter un sweet
+ * @param sweet
+ */
+function addSweet(sweet){
+    var key = localStorage.getItem("user-key");
+    var url = "http://localhost:8080/Twister/sweet?key="+key+"&sweet="+sweet;
+    $.getJSON(url, function(data, status){
+        console.log(1, "addSweet");
+    }).done(function(data){
+        // console.log(2, data);
+        if(data.code==200){
+            $('#new-message').val("");
+            getSweet(list_follow)
+        }
+    });
+}
+
+/**
+ * Récupère les sweet selon l'id d'un utilisateur
+ * @param id
+ */
+function getSweetById(id){
+    var url = "http://localhost:8080/Twister/sweet/getById?id="+id;
+    $.getJSON(url, function(data, status){
+        console.log(1, "getSweetById");
+    }).done(function(data){
+        console.log(2, data);
+        if(data.code==200){
+            console.log(3, data.list);
+            // $('#new-message').val("");
+            fillSweet(data.list);
+        }
+    });
+}
+
+/**
+ * Fonction qui récupère le profil d'une personne selon son id
+ * @param id Id du profil à récupérer
+ * @returns {any}
+ */
+function getProfileById(id){
+    var url = "http://localhost:8080/Twister/user/getProfileById?id="+id;
+    var req = new XMLHttpRequest();
+    var response = null;
+    req.open('GET', url, false);
+    req.send(null);
+    if (req.status === 200) {
+        // console.log("Réponse reçue:", JSON.parse(req.responseText));
+        response=JSON.parse(req.responseText);
+    } else {
+        // console.log("Status de la réponse: %d (%s)", req.status, req.statusText, req.responseText);
+        response=JSON.parse(req.statusText);
+    }
+    console.log(response)
+    return response;
+}
+
+/**
+ * Fonction pour récupérer tous les sweets de l'utilisateur et de ces follow
+ * @param list liste des followed
+ */
+function getSweet(list){
+    var url = "http://localhost:8080/Twister/sweet/getSweet?";
+    var i = 0;
+    console.log(1, list)
+    list.forEach(function(e){
+        // console.log(e);
+        url=url+"user_"+i+"="+e.followed_id+"&";
+        i++;
+    })
+    url=url+"user_"+i+"="+localStorage.getItem("user_id");
+    console.log(url);
+    $.getJSON(url, function(data, status){
+        console.log(1, "getSweetById");
+    }).done(function(data){
+        console.log(2, data);
+        if(data.code==200){
+            console.log(3, data.list);
+            fillSweet(data.list); //On appelle la fonction qui va afficher les sweets sur la page main
+            // $('#new-message').val("");
         }
     });
 }
