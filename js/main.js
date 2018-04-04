@@ -206,3 +206,5 @@ function setCommentBySweet(sweet){
 //     });
 //     $('.commentaire-item').hide();
 // }
+
+//TODO : fonctionnalité pour ajouter une photo de profil; Limiter les sweet sur le board; changer les methodes get en post pour connexion et create
