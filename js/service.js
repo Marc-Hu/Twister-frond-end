@@ -9,10 +9,32 @@ function connection(username, password){
     // console.log(username, password)
     var url = "http://localhost:8080/Twister/user/login?username="+username+"&password="+password;
     // createRequest(url);
+
+    // $.ajax({
+    //     type : "GET",
+    //     url : url,
+    //     dataType: "json",
+    //     success : function(data, status){
+    //         // console.log(status , data);
+    //         if (data.hasOwnProperty('key')){
+    //             console.log("success connected");
+    //             console.log(data);
+    //             localStorage.setItem("user-key", data.key); //Si l'utilisateur existe on ajoute la clé dans le localStorage
+    //             localStorage.setItem("user-username", username);
+    //             getMyProfile();
+    //             $('#login').hide();
+    //             showMainPage();
+    //         }else{
+    //             // alert(response.message);
+    //             $('#msg-err-login').text("Nom d'utilisateur ou mot de passe erroné");
+    //         }
+    //     }
+    // })
+
     $.getJSON(url, function(data, status){
         // console.log(1);
     }).done(function(data){
-        // console.log(2, data);
+        console.log(2, data);
         if (data.hasOwnProperty('key')){
             console.log("success connected");
             // console.log(data);
@@ -20,7 +42,7 @@ function connection(username, password){
             localStorage.setItem("user-username", username);
             getMyProfile();
             $('#login').hide();
-            showMainPage();
+            // showMainPage();
         }else{
             // alert(response.message);
             $('#msg-err-login').text("Nom d'utilisateur ou mot de passe erroné");
@@ -114,7 +136,8 @@ function getProfile(){
             $('#myprofile_lastname').text(data.lastname);
             $('#myprofile_firstname').text(data.firstname);
             localStorage.setItem("user_id", data.id);
-            // showMainPage();
+            showMainPage();
+            getListFollowed();
         }else{
             console.log("error");
         }
@@ -129,7 +152,7 @@ function getProfile(){
 function getProfileByUsername(username){
     var url = "http://localhost:8080/Twister/user/profile?username="+username;
     $.getJSON(url, function(data, status){
-        console.log(1, "getProfileByUsername");
+        // console.log(1, "getProfileByUsername");
     }).done(function(data){
         // console.log(2, data);
         if(data.hasOwnProperty("firstname")){ //Si l'utilisateur existe
@@ -153,7 +176,7 @@ function getProfileByUsername(username){
 function getProfileByUsernameForSearch(username){
     var url = "http://localhost:8080/Twister/user/profile?username="+username;
     $.getJSON(url, function(data, status){
-        console.log(1, "getProfileByUsername");
+        // console.log(1, "getProfileByUsername");
     }).done(function(data){
         // console.log(2, data);
         if(data.hasOwnProperty("firstname")){ //Si l'utilisateur existe
@@ -247,14 +270,14 @@ function getListFollowed(){
     var url = "http://localhost:8080/Twister/user/listFollowed?id="+localStorage.getItem("user_id");
     // console.log(url)
     $.getJSON(url, function(data, status){
-        console.log(1, "getListFollowed");
+        // console.log(1, "getListFollowed");
     }).done(function(data){
         // console.log(2, data);
         if(data.list.length!=0){
             list_follow=data.list;
             setListFollowed();
             setListenerTofollow();
-            getSweet(data.list);
+            getSweet(data.list, true);
         }else{
             console.log("error or empty list")
         }
@@ -269,9 +292,9 @@ function addSweet(sweet){
     var key = localStorage.getItem("user-key");
     var url = "http://localhost:8080/Twister/sweet?key="+key+"&sweet="+sweet;
     $.getJSON(url, function(data, status){
-        console.log(1, "addSweet");
+        // console.log(1, "addSweet");
     }).done(function(data){
-        // console.log(2, data);
+        console.log(data);
         if(data.code==200){
             $('#new-message').val("");
             getSweet(list_follow)
@@ -286,7 +309,7 @@ function addSweet(sweet){
 function getSweetById(id){
     var url = "http://localhost:8080/Twister/sweet/getById?id="+id;
     $.getJSON(url, function(data, status){
-        console.log(1, "getSweetById");
+        // console.log(1, "getSweetById");
     }).done(function(data){
         // console.log(2, data);
         if(data.code==200){
@@ -304,6 +327,7 @@ function getSweetById(id){
  */
 function getProfileById(id){
     var url = "http://localhost:8080/Twister/user/getProfileById?id="+id;
+
     var req = new XMLHttpRequest();
     var response = null;
     req.open('GET', url, false);
@@ -322,41 +346,73 @@ function getProfileById(id){
 /**
  * Fonction pour récupérer tous les sweets de l'utilisateur et de ces follow
  * @param list liste des followed
+ * @param forinit boolean if it's for initialisation
  */
-function getSweet(list){
+function getSweet(list, forinit){
     var url = "http://localhost:8080/Twister/sweet/getSweet?";
     var i = 0;
-    // console.log(1, list)
+    console.log(1, list)
     list.forEach(function(e){
         // console.log(e);
         url=url+"user_"+i+"="+e.followed_id+"&";
         i++;
     })
+    while(localStorage.getItem("user_id")==null){
+        console.log("wait id")
+    }
     url=url+"user_"+i+"="+localStorage.getItem("user_id");
     // console.log(url);
     $.getJSON(url, function(data, status){
         console.log(1, "getSweet");
     }).done(function(data){
-        // console.log(2, data);
+        console.log(2, data);
         if(data.code==200){
             // console.log(3, data.list);
-            fillSweet(data.list); //On appelle la fonction qui va afficher les sweets sur la page main
+            if (forinit){
+                fillSweet(data.list); //On appelle la fonction qui va afficher les sweets sur la page main
+            }else{
+                addSweetToBoard(data.list);
+            }
+
             // $('#new-message').val("");
         }
     });
 }
 
 function addComment(sweet_id, comment){
-    var url = "http://localhost:8080/Twister/sweet/addComment?key="+localStorage.getItem("user-key")+"&sweetId="+sweet_id+"&commentMessage="+comment;
-    $.getJSON(url, function(data, status){
-        // console.log(1, "getSweetById");
-    }).done(function(data){
-        // console.log(2, data);
-        if(data.code==200){
+    // var url = "http://localhost:8080/Twister/sweet/addComment?key="+localStorage.getItem("user-key")+"&sweetId="+sweet_id+"&commentMessage="+comment;
+    // $.getJSON(url, function(data, status){
+    //     // console.log(1, "getSweetById");
+    // }).done(function(data){
+    //     // console.log(2, data);
+    //     if(data.code==200){
+    //         // console.log(3, data.list);
+    //         // $('#new-message').val("");
+    //         // console.log("success")
+    //         getSweet(list_follow) //On récupère les nouveaux messages
+    //     }
+    // });
+    var post_url = "http://localhost:8080/Twister/sweet/addComment" //get form action url
+    var form_data = "key=" + localStorage.getItem("user-key") + "&sweetId=" + sweet_id + "&commentMessage=" + comment;
+    $.post( post_url, form_data, function( response ) {
+        console.log(response)
+        if (response.code == 200) {
             // console.log(3, data.list);
             // $('#new-message').val("");
-            // console.log("success")
-            getSweet(list_follow) //On récupère les nouveaux messages
+            date=new Date();
+            var text =
+                $('<div class="commentaire-item-top">\n' +
+                    '   <div class="list-item-top-span">\n' +
+                    '       <span class="user-message">'+localStorage.getItem('user-username')+'</span>\n' +
+                    '   </div>\n' +
+                    '   <div class="list-item-top-span">\n' +
+                    '       <span class="date-message">'+date.getHours()+':'+date.getMinutes()+' '+date.toLocaleDateString()+'</span>\n' +
+                    '   </div>\n' +
+                    '</div>\n' +
+                    '<div class="commentaire-item-bottom">\n' +
+                    '    <p class="contenu-message">'+comment+'</p>\n' +
+                    '</div>\n');
+            $('#'+sweet_id).find('.commentaire-item').append(text);
         }
     });
 }

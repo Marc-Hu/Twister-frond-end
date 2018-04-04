@@ -15,18 +15,10 @@ $(document).ready(function() {
      */
     $('#login_connexion').click(function(e){
         // console.log($('#login_name'))
-        var login = $('.login_input')[0].value;
+        var login = $('.login_input')[0].value; //On récupère les username et mdp
         var password = $('.login_input')[1].value;
         // console.log(login+" "+password)
-        var connected = connection(login, password);
-        console.log(connected)
-        if(connected){
-            getMyProfile()
-            $('#login').hide();
-            showMainPage()
-        }else{
-            $('#msg-err-login').text("Nom d'utilisateur ou mot de passe erroné");
-        }
+        connection(login, password); //Et on se connecte au serveur
     });
 
     /**
@@ -176,7 +168,6 @@ function showMainPage(){
     $('#middlediv').show();
     $('#log').show();
     $('.maindiv').show();
-    getListFollowed();
 }
 
 /**
@@ -286,13 +277,13 @@ function setListenerTofollow(){
 
 }
 
-function setListenerToSweet(){
+function setListenerToSweet(id){
     $('.add_comment').val("");//Bug des textarea, par défaut il y a plein d'espace et on ne voit pas le placeholder
     $('#new-message').val("");//Pareil que celui au dessus
     /**
      * Clique sur le bouton pour voir ou réduire les commentaires d'un post
      */
-    $('.show-com').click(function(e) {
+    $('#'+id+' .show-com').click(function(e) {
         console.log("Appuie sur le bouton commentaire");
         if($(this).parent().find('.commentaire-item').first().is(":visible")){
             $(this).parent().find('.commentaire-item').first().hide();
@@ -303,7 +294,7 @@ function setListenerToSweet(){
         }
     })
 
-    $('.add_comment_button').mousedown(function(e){
+    $('#'+id+' .add_comment_button').mousedown(function(e){
         var sweet_id = $(this).parent().parent().parent().attr('id');
         var message = $(this).parent().find('.add_comment').val();
         console.log(sweet_id, message);
