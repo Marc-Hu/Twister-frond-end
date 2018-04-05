@@ -297,7 +297,7 @@ function setListenerToSweet(id){
     $('#'+id+' .add_comment_button').mousedown(function(e){
         var sweet_id = $(this).parent().parent().parent().attr('id');
         var message = $(this).parent().find('.add_comment').val();
-        console.log(sweet_id, message);
+        // console.log(sweet_id, message);
         if(message.length!=0){
             // console.log("not empty")
             addComment(sweet_id, message)

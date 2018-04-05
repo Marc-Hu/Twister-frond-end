@@ -2,10 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3585941b-2777-455c-956d-e63a9c4fd770" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/panel.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/panel.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/script.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/service.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/service.js" afterDir="false" />
     </list>
@@ -82,8 +78,8 @@
       <file leaf-file-name="service.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/service.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="341">
-              <caret line="365" column="66" selection-start-line="365" selection-start-column="66" selection-end-line="365" selection-end-column="66" />
+            <state relative-caret-position="316">
+              <caret line="254" column="16" selection-start-line="254" selection-start-column="16" selection-end-line="254" selection-end-column="16" />
             </state>
           </provider>
         </entry>
@@ -108,11 +104,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>home_page</find>
-      <find>showMainPage</find>
-      <find>oui</find>
-      <find>delete</find>
-      <find>empty lis</find>
       <find>remove</find>
       <find>remove\(</find>
       <find>detach</find>
@@ -122,7 +113,6 @@
       <find>showMain</find>
       <find>get profile</find>
       <find>getProfile</find>
-      <find>console</find>
       <find>showmain</find>
       <find>getPro</find>
       <find>init</find>
@@ -137,7 +127,13 @@
       <find>get</find>
       <find>unfollow</find>
       <find>list_comment</find>
+      <find>getProfileById</find>
+      <find>getP</find>
       <find>getListFollowed</find>
+      <find>TEST</find>
+      <find>GETlIST</find>
+      <find>console</find>
+      <find>error</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -246,12 +242,12 @@
       <workItem from="1522533498330" duration="29882000" />
       <workItem from="1522825254185" duration="1371000" />
       <workItem from="1522826933060" duration="56000" />
-      <workItem from="1522827449853" duration="17476000" />
+      <workItem from="1522827449853" duration="19072000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="105487000" />
+    <option name="totallyTimeSpent" value="107083000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
@@ -288,20 +284,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/js/login.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="3" column="63" selection-start-line="3" selection-start-column="63" selection-end-line="3" selection-end-column="63" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/panel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1600">
-          <caret line="64" column="9" lean-forward="true" selection-start-line="64" selection-start-column="9" selection-end-line="64" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2375">
@@ -588,10 +570,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/Downloads/twister.sql">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$USER_HOME$/Downloads/twister(1).sql">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/js/service.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="341">
-          <caret line="365" column="66" selection-start-line="365" selection-start-column="66" selection-end-line="365" selection-end-column="66" />
+        <state relative-caret-position="316">
+          <caret line="254" column="16" selection-start-line="254" selection-start-column="16" selection-end-line="254" selection-end-column="16" />
         </state>
       </provider>
     </entry>

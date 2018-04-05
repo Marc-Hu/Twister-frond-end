@@ -47,20 +47,6 @@ function removeUserKey(){
  * @returns object JSON
  */
 function createUser(name, surname, login, email, password, repeat){
-    // console.log(name, surname, login, email, password, repeat);
-    // var url = "http://localhost:8080/Twister/user/create?f_name="+name+"&l_name="+surname+"&username="+login+"&password="+password;
-    // $.getJSON(url, function(data, status){
-    //     // console.log(1);
-    // }).done(function(data){
-    //     // console.log(2, data);
-    //     if(data.code==200){//Si la réponse est bonne (par la suite on mettra une condition sur le code de retour
-    //         console.log("success register")
-    //         connection(login, password);
-    //         $('#register').hide();
-    //     }else{ //Sinon
-    //         $('#msg-err-register').text("L'utilisateur existe déjà")// Sera modifié par la suite car on à le message de retour de l'API
-    //     }
-    // })
 
     var post_url = "http://localhost:8080/Twister/user/create" //get form action url
     var form_data = "f_name=" + name + "&l_name=" + surname+"&username="+login+"&password="+password;
@@ -116,7 +102,7 @@ function logout(){
  */
 function getProfile(){
     var username = localStorage.getItem("user-username");
-    var url = "http://localhost:8080/Twister/user/profile?username="+username;
+    var url = "http://localhost:8080/Twister/user/profile?username="+username+"&key="+localStorage.getItem('user-key');
     $.getJSON(url, function(data, status){
         // console.log(1);
     }).done(function(data){
@@ -142,7 +128,7 @@ function getProfile(){
  * @returns {any}
  */
 function getProfileByUsername(username){
-    var url = "http://localhost:8080/Twister/user/profile?username="+username;
+    var url = "http://localhost:8080/Twister/user/profile?username="+username+"&key="+localStorage.getItem('user-key');
     $.getJSON(url, function(data, status){
         // console.log(1, "getProfileByUsername");
     }).done(function(data){
@@ -166,7 +152,7 @@ function getProfileByUsername(username){
  * @param username
  */
 function getProfileByUsernameForSearch(username){
-    var url = "http://localhost:8080/Twister/user/profile?username="+username;
+    var url = "http://localhost:8080/Twister/user/profile?username="+username+"&key="+localStorage.getItem("user-key");
     $.getJSON(url, function(data, status){
         // console.log(1, "getProfileByUsername");
     }).done(function(data){
@@ -199,7 +185,7 @@ function isLogged(){
  * @returns {any}
  */
 function getUserList(username){
-    var url = "http://localhost:8080/Twister/user/list?username="+username;
+    var url = "http://localhost:8080/Twister/user/list?username="+username+"&key="+localStorage.getItem("user-key");
     $.getJSON(url, function(data, status){
         // console.log(1, "getUserList");
     }).done(function(data){
@@ -260,14 +246,14 @@ function unfollow(from_key, to_id){
  * Fonction qui permet de récupérer la liste des personne qu'on follow
  */
 function getListFollowed(){
-    var url = "http://localhost:8080/Twister/user/listFollowed?id="+localStorage.getItem("user_id");
+    var url = "http://localhost:8080/Twister/user/listFollowed?id="+localStorage.getItem("user_id")+"&key="+localStorage.getItem("user-key");
     // console.log(url)
     $.getJSON(url, function(data, status){
         console.log(1, "getListFollowed");
     }).done(function(data){
         console.log(2, data);
         if(data.list.length!=0){
-            console.log("test");
+            // console.log("test");
             getSweet(data.list, true);
         }else{
             getSweet([], true);
@@ -302,7 +288,7 @@ function addSweet(sweet){
  * @param id
  */
 function getSweetById(id){
-    var url = "http://localhost:8080/Twister/sweet/getById?id="+id;
+    var url = "http://localhost:8080/Twister/sweet/getById?id="+id+"&key="+localStorage.getItem("user-key");
     $.getJSON(url, function(data, status){
         // console.log(1, "getSweetById");
     }).done(function(data){
@@ -321,7 +307,7 @@ function getSweetById(id){
  * @returns {any}
  */
 function getProfileById(id){
-    var url = "http://localhost:8080/Twister/user/getProfileById?id="+id;
+    var url = "http://localhost:8080/Twister/user/getProfileById?id="+id+"&key="+localStorage.getItem('user-key');
 
     var req = new XMLHttpRequest();
     var response = null;
@@ -344,7 +330,7 @@ function getProfileById(id){
  * @param forinit boolean if it's for initialisation
  */
 function getSweet(list, forinit){
-    var url = "http://localhost:8080/Twister/sweet/getSweet?";
+    var url = "http://localhost:8080/Twister/sweet/getSweet?key="+localStorage.getItem("user-key")+"&";
     var i = 0;
     // console.log(1, list)
     list.forEach(function(e){
@@ -356,7 +342,7 @@ function getSweet(list, forinit){
         console.log("wait id")
     }
     url=url+"user_"+i+"="+localStorage.getItem("user_id");
-    // console.log(url);
+    console.log(url);
     $.getJSON(url, function(data, status){
         console.log(1, "getSweet");
     }).done(function(data){
@@ -378,7 +364,7 @@ function addComment(sweet_id, comment){
     var post_url = "http://localhost:8080/Twister/sweet/addComment" //get form action url
     var form_data = "key=" + localStorage.getItem("user-key") + "&sweetId=" + sweet_id + "&commentMessage=" + comment;
     $.post( post_url, form_data, function( response ) {
-        console.log(response)
+        // console.log(response)
         if (response.code == 200) {
             // console.log(3, data.list);
             // $('#new-message').val("");
