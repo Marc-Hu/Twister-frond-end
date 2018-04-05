@@ -150,6 +150,7 @@ function init(){
         $('#login').hide();
         showMainPage();
         getMyProfile();//Récupère et rempli la page mon profil
+        $('#new-message').val("");
     }
 }
 
@@ -226,7 +227,8 @@ function setUserProfile(user){
  * @param list
  */
 function setListFollowed(){
-    $('#list_followed').empty();
+    console.log("test1")
+    $('#list_followed').empty()
     var item=null;
     list_follow.forEach(function(e){
         item="<div class='followed_list_main' ><p><span class='followed_username'>"+e.followed_username+
@@ -264,9 +266,7 @@ function setListenerTofollow(){
         if(response!=null && response.toLowerCase()=="oui"){
             var key = localStorage.getItem("user-key"); //récupère la clé
             var followed_id = $(this).attr('id').split("_")[1]; //Récupère l'id du followed grâce à son id qui est userId_X
-            // console.log(followed_id);
             unfollow(key, followed_id); //Appel du service
-            getListFollowed();
         }
     });
     $(".followed_username").click(function(e){
@@ -303,4 +303,18 @@ function setListenerToSweet(id){
             addComment(sweet_id, message)
         }
     });
+}
+
+/**
+ * Fonction qui va ajouter un listener sur le bouton afficher plus
+ */
+function setListenerShowMore(){
+    $('#show_more').click(function(){
+        console.log("show more clicked!!");
+        $(this).remove();//On enlève le bouton courant
+        max_val_display_sweet+=10; //On incrément la valeur maximal d'affichage des sweets
+        fillSweet(list_comment, false); //On appel la fonction qui va ajouter 10 sweet dans le fil de l'actualité
+        //Argument false pour dire qu'on est pas à l'initialisation et donc on de supprime pas les anciens message
+        //Mais on les ajoute!
+    })
 }

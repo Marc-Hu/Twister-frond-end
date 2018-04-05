@@ -15,6 +15,7 @@ $(document).ready(function() {
 });
 
 var list_comment = new Array(0); //Variable qui contiendra les commentaires récupérer lors de l'appel du servlet
+var max_val_display_sweet = 10;
 
 /**
  * Fonction to sort list_comment
@@ -29,61 +30,72 @@ function custom_sort(a, b) {
 /**
  * Fonction qui va ajouter les sweets dans la page main selon les sweets dans la liste
  * @param list liste des sweet reçu de la BDD
+ * @param forinit boolean pour indiquer si c'est pour l'initialisation
  */
-function fillSweet(list){
+function fillSweet(list, forinit){
     list_comment=list;
+    list_comment.sort(custom_sort);
+    list.sort(custom_sort)
     var user = "";
     var id = "";
-    $('.list-item').empty();
-    // console.log("test1", list.length);
-    console.log(list_comment)
-    list_comment.sort(custom_sort)
-    console.log(list_comment)
+    var i = 0;
+    if(forinit){ //Si c'est à l'initialisation
+        //On vide la contenu sinon on ne le vide pas
+        $('.list-item').empty();
+    }
     list.forEach(function(e){
-        // console.log(e._id.$oid);
-        id= e._id.$oid;
-        var text = $('<div class="sweets" id="'+id+'"><div class="list-item-top">\n' +
-            '    <div class="list-item-top-span">\n' +
-            '        <span class="user-message"></span>\n' +
-            '    </div>\n' +
-            '    <div class="list-item-top-span">\n' +
-            '        <span class="date-message"></span>\n' +
-            '    </div>\n' +
-            '</div>\n' +
-            '<div class="list-item-mid">\n' +
-            '    <p class="contenu-message"></p>\n' +
-            '</div>\n' +
-            '<div>\n' +
-            '    <span class="show-com" >+ Commentaires</span>\n' +
-            '    <div class="commentaire-item">\n' +
-            '    </div>\n' +
-            '</div>\n' +
-            '<div>\n' +
-            '    <span>Ajouter un commentaire</span>\n' +
-            '    <div class="div_new_comment">\n' +
-            '        <textarea rows="1" placeholder="Nouveau commentaire" class="add_comment" value="">\n' +
-            '        </textarea>\n' +
-            '        <input type="submit" value="Ajouter" class="add_comment_button">\n' +
-            '    </div>\n' +
-            '</div></div>' +
-            '<br>');
-        //Condition pour éviter d'appeler l'API pour rien
-        if(user.id!=""){
-            if(user.id!=e.userId){
-                // console.log("test");
-                user = getProfileById(e.userId) //Récupération du profil par rapport à l'id
+        if(i<max_val_display_sweet){
+            // console.log(e._id.$oid);
+            id= e._id.$oid;
+            if($('#'+id).length==0){
+                var text = $('<div class="sweets" id="'+id+'"><div class="list-item-top">\n' +
+                    '    <div class="list-item-top-span">\n' +
+                    '        <span class="user-message"></span>\n' +
+                    '    </div>\n' +
+                    '    <div class="list-item-top-span">\n' +
+                    '        <span class="date-message"></span>\n' +
+                    '    </div>\n' +
+                    '</div>\n' +
+                    '<div class="list-item-mid">\n' +
+                    '    <p class="contenu-message"></p>\n' +
+                    '</div>\n' +
+                    '<div>\n' +
+                    '    <span class="show-com" >+ Commentaires</span>\n' +
+                    '    <div class="commentaire-item">\n' +
+                    '    </div>\n' +
+                    '</div>\n' +
+                    '<div>\n' +
+                    '    <span>Ajouter un commentaire</span>\n' +
+                    '    <div class="div_new_comment">\n' +
+                    '        <textarea rows="1" placeholder="Nouveau commentaire" class="add_comment" value="">\n' +
+                    '        </textarea>\n' +
+                    '        <input type="submit" value="Ajouter" class="add_comment_button">\n' +
+                    '    </div>\n' +
+                    '</div></div>' +
+                    '<br>');
+                //Condition pour éviter d'appeler l'API pour rien
+                if(user.id!=""){
+                    if(user.id!=e.userId){
+                        // console.log("test");
+                        user = getProfileById(e.userId) //Récupération du profil par rapport à l'id
+                    }
+                }
+                text.find('.contenu-message').first().text(e.sweet); //Ajout du contenu du sweet
+                text.find('.user-message').first().text(user.username); //Ajout du username du sweet
+                date = new Date(e.date.$date);
+                text.find('.date-message').first().text(date.getHours()+':'+date.getMinutes()+' '+date.toLocaleDateString());//Ajout de la date du sweet
+                // console.log("test")
+                $('.list-item').append(text)
             }
         }
-        text.find('.contenu-message').first().text(e.sweet); //Ajout du contenu du sweet
-        text.find('.user-message').first().text(user.username); //Ajout du username du sweet
-        date = new Date(e.date.$date);
-        text.find('.date-message').first().text(date.getHours()+':'+date.getMinutes()+' '+date.toLocaleDateString());//Ajout de la date du sweet
-        // console.log("test")
-        $('.list-item').append(text)//Ajout du sweet dans la page
-        setCommentBySweet(e);
-    })
-    setListenerToSweet(); //Ajout des listener sur les sweets
-    // setComment();
+        i++;
+        setListenerToSweet();//Ajout des listener sur les sweets
+    });
+    if(i>max_val_display_sweet){ //Si il y a encore des sweets en attente
+        var show_more = $('<div id="show_more"><p>Afficher plus</p></div>'); //Construction du boutton pour afficher plus de sweet
+        $('.list-item').append(show_more); // On ajoute le bouton tout en bas de la liste
+        setListenerShowMore(); //On ajoute le listener pour le nouveau 'bouton'
+    }
 }
 
 /**
@@ -92,42 +104,50 @@ function fillSweet(list){
  * @param sweet
  */
 function addSweetToBoard(sweet){
+    list_comment=sweet;
+    list_comment.sort(custom_sort);
+    sweet.sort(custom_sort);
+    var i=0;
     sweet.forEach(function(e){
-        id= e._id.$oid;
-        if($('#'+id).length==0){ //Si le sweet n'existe pas encore
-            var text = $('<div class="sweets" id="'+id+'"><div class="list-item-top">\n' +
-                '    <div class="list-item-top-span">\n' +
-                '        <span class="user-message"></span>\n' +
-                '    </div>\n' +
-                '    <div class="list-item-top-span">\n' +
-                '        <span class="date-message"></span>\n' +
-                '    </div>\n' +
-                '</div>\n' +
-                '<div class="list-item-mid">\n' +
-                '    <p class="contenu-message"></p>\n' +
-                '</div>\n' +
-                '<div>\n' +
-                '    <span class="show-com" >+ Commentaires</span>\n' +
-                '    <div class="commentaire-item">\n' +
-                '    </div>\n' +
-                '</div>\n' +
-                '<div>\n' +
-                '    <span>Ajouter un commentaire</span>\n' +
-                '    <div class="div_new_comment">\n' +
-                '        <textarea rows="1" placeholder="Nouveau commentaire" class="add_comment" value="">\n' +
-                '        </textarea>\n' +
-                '        <input type="submit" value="Ajouter" class="add_comment_button">\n' +
-                '    </div>\n' +
-                '</div></div>' +
-                '<br>');
-            text.find('.contenu-message').first().text(e.sweet); //Ajout du contenu du sweet
-            text.find('.user-message').first().text(localStorage.getItem('user-username')); //Ajout du username du sweet
-            date = new Date(e.date.$date);
-            text.find('.date-message').first().text(date.getHours()+':'+date.getMinutes()+' '+date.toLocaleDateString());//Ajout de la date du sweet
-            $('.list-item').prepend(text)//Ajout du sweet dans la page
-            setCommentBySweet(e); //Ajouter les commentaires du sweet (par défaut y'a rien donc il va juste ajouter les listener
+        if(i<max_val_display_sweet){
+            id= e._id.$oid;
+            if($('#'+id).length==0){ //Si le sweet n'existe pas encore
+                var text = $('<div class="sweets" id="'+id+'"><div class="list-item-top">\n' +
+                    '    <div class="list-item-top-span">\n' +
+                    '        <span class="user-message"></span>\n' +
+                    '    </div>\n' +
+                    '    <div class="list-item-top-span">\n' +
+                    '        <span class="date-message"></span>\n' +
+                    '    </div>\n' +
+                    '</div>\n' +
+                    '<div class="list-item-mid">\n' +
+                    '    <p class="contenu-message"></p>\n' +
+                    '</div>\n' +
+                    '<div>\n' +
+                    '    <span class="show-com" >+ Commentaires</span>\n' +
+                    '    <div class="commentaire-item">\n' +
+                    '    </div>\n' +
+                    '</div>\n' +
+                    '<div>\n' +
+                    '    <span>Ajouter un commentaire</span>\n' +
+                    '    <div class="div_new_comment">\n' +
+                    '        <textarea rows="1" placeholder="Nouveau commentaire" class="add_comment" value="">\n' +
+                    '        </textarea>\n' +
+                    '        <input type="submit" value="Ajouter" class="add_comment_button">\n' +
+                    '    </div>\n' +
+                    '</div></div>' +
+                    '<br>');
+                text.find('.contenu-message').first().text(e.sweet); //Ajout du contenu du sweet
+                text.find('.user-message').first().text(localStorage.getItem('user-username')); //Ajout du username du sweet
+                date = new Date(e.date.$date);
+                text.find('.date-message').first().text(date.getHours()+':'+date.getMinutes()+' '+date.toLocaleDateString());//Ajout de la date du sweet
+                $('.list-item').prepend(text);//Ajout du sweet dans la page
+                setCommentBySweet(e); //Ajouter les commentaires du sweet (par défaut y'a rien donc il va juste ajouter les listener
+            }
         }
+        i++;
     })
+    setListenerShowMore();
 }
 
 /**

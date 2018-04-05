@@ -66,3 +66,8 @@ function setSweetDefaultPanel(){
     $('.contenu-message').text("");
     $('.user-message').text("");
 }
+
+function setDefaultMain(){
+    $('.list-item').empty();
+    $('#list_followed').empty();
+}

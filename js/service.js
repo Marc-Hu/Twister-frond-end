@@ -6,48 +6,25 @@
  * @returns Object JSON
  */
 function connection(username, password){
-    // console.log(username, password)
-    var url = "http://localhost:8080/Twister/user/login?username="+username+"&password="+password;
-    // createRequest(url);
-
-    // $.ajax({
-    //     type : "GET",
-    //     url : url,
-    //     dataType: "json",
-    //     success : function(data, status){
-    //         // console.log(status , data);
-    //         if (data.hasOwnProperty('key')){
-    //             console.log("success connected");
-    //             console.log(data);
-    //             localStorage.setItem("user-key", data.key); //Si l'utilisateur existe on ajoute la clé dans le localStorage
-    //             localStorage.setItem("user-username", username);
-    //             getMyProfile();
-    //             $('#login').hide();
-    //             showMainPage();
-    //         }else{
-    //             // alert(response.message);
-    //             $('#msg-err-login').text("Nom d'utilisateur ou mot de passe erroné");
-    //         }
-    //     }
-    // })
-
-    $.getJSON(url, function(data, status){
-        // console.log(1);
-    }).done(function(data){
-        console.log(2, data);
-        if (data.hasOwnProperty('key')){
+    var post_url = "http://localhost:8080/Twister/user/login" //get form action url
+    var form_data = "username=" + username + "&password=" + password;
+    $.post( post_url, form_data, function( response ) {
+        // console.log(response)
+        response = JSON.parse(response);
+        if (response.hasOwnProperty('key')){
             console.log("success connected");
             // console.log(data);
-            localStorage.setItem("user-key", data.key); //Si l'utilisateur existe on ajoute la clé dans le localStorage
+            localStorage.setItem("user-key", response.key); //Si l'utilisateur existe on ajoute la clé dans le localStorage
             localStorage.setItem("user-username", username);
             getMyProfile();
             $('#login').hide();
+            showMainPage();
             // showMainPage();
         }else{
             // alert(response.message);
             $('#msg-err-login').text("Nom d'utilisateur ou mot de passe erroné");
         }
-    })
+    });
 }
 
 /**
@@ -71,19 +48,33 @@ function removeUserKey(){
  */
 function createUser(name, surname, login, email, password, repeat){
     // console.log(name, surname, login, email, password, repeat);
-    var url = "http://localhost:8080/Twister/user/create?f_name="+name+"&l_name="+surname+"&username="+login+"&password="+password;
-    $.getJSON(url, function(data, status){
-        // console.log(1);
-    }).done(function(data){
-        // console.log(2, data);
-        if(data.code==200){//Si la réponse est bonne (par la suite on mettra une condition sur le code de retour
+    // var url = "http://localhost:8080/Twister/user/create?f_name="+name+"&l_name="+surname+"&username="+login+"&password="+password;
+    // $.getJSON(url, function(data, status){
+    //     // console.log(1);
+    // }).done(function(data){
+    //     // console.log(2, data);
+    //     if(data.code==200){//Si la réponse est bonne (par la suite on mettra une condition sur le code de retour
+    //         console.log("success register")
+    //         connection(login, password);
+    //         $('#register').hide();
+    //     }else{ //Sinon
+    //         $('#msg-err-register').text("L'utilisateur existe déjà")// Sera modifié par la suite car on à le message de retour de l'API
+    //     }
+    // })
+
+    var post_url = "http://localhost:8080/Twister/user/create" //get form action url
+    var form_data = "f_name=" + name + "&l_name=" + surname+"&username="+login+"&password="+password;
+    $.post( post_url, form_data, function( response ) {
+        // console.log(response)
+        response = JSON.parse(response);
+        if(response.code==200){//Si la réponse est bonne (par la suite on mettra une condition sur le code de retour
             console.log("success register")
             connection(login, password);
             $('#register').hide();
         }else{ //Sinon
             $('#msg-err-register').text("L'utilisateur existe déjà")// Sera modifié par la suite car on à le message de retour de l'API
         }
-    })
+    });
 }
 
 /**
@@ -112,6 +103,7 @@ function logout(){
             console.log("success logout");
             setMyProfileDefaultPanel();//On va mettre les panels par défaut
             setProfileDefaultPanel();
+            setDefaultMain();
         }else{
             console.log("error");
         }
@@ -235,6 +227,7 @@ function follow(from_key, to_id){
         if(data.code==200){ //Si c'est bon
             alert("Vous suivez désormais "+current_user.username);
             showUnfollow();
+            getListFollowed();
         }else{ //Sinon
             alert("Vous suivez déjà cette personne.");
         }
@@ -270,17 +263,19 @@ function getListFollowed(){
     var url = "http://localhost:8080/Twister/user/listFollowed?id="+localStorage.getItem("user_id");
     // console.log(url)
     $.getJSON(url, function(data, status){
-        // console.log(1, "getListFollowed");
+        console.log(1, "getListFollowed");
     }).done(function(data){
-        // console.log(2, data);
+        console.log(2, data);
         if(data.list.length!=0){
-            list_follow=data.list;
-            setListFollowed();
-            setListenerTofollow();
+            console.log("test");
             getSweet(data.list, true);
         }else{
+            getSweet([], true);
             console.log("error or empty list")
         }
+        list_follow=data.list;
+        setListFollowed();
+        setListenerTofollow();
     });
 }
 
@@ -294,7 +289,7 @@ function addSweet(sweet){
     $.getJSON(url, function(data, status){
         // console.log(1, "addSweet");
     }).done(function(data){
-        console.log(data);
+        // console.log(data);
         if(data.code==200){
             $('#new-message').val("");
             getSweet(list_follow)
@@ -351,7 +346,7 @@ function getProfileById(id){
 function getSweet(list, forinit){
     var url = "http://localhost:8080/Twister/sweet/getSweet?";
     var i = 0;
-    console.log(1, list)
+    // console.log(1, list)
     list.forEach(function(e){
         // console.log(e);
         url=url+"user_"+i+"="+e.followed_id+"&";
@@ -365,33 +360,21 @@ function getSweet(list, forinit){
     $.getJSON(url, function(data, status){
         console.log(1, "getSweet");
     }).done(function(data){
-        console.log(2, data);
+        // console.log(2, data);
         if(data.code==200){
             // console.log(3, data.list);
+            max_val_display_sweet=10; // On remet la variable à 10
             if (forinit){
-                fillSweet(data.list); //On appelle la fonction qui va afficher les sweets sur la page main
+                fillSweet(data.list, true); //On appelle la fonction qui va afficher les sweets sur la page main
             }else{
                 addSweetToBoard(data.list);
             }
-
             // $('#new-message').val("");
         }
     });
 }
 
 function addComment(sweet_id, comment){
-    // var url = "http://localhost:8080/Twister/sweet/addComment?key="+localStorage.getItem("user-key")+"&sweetId="+sweet_id+"&commentMessage="+comment;
-    // $.getJSON(url, function(data, status){
-    //     // console.log(1, "getSweetById");
-    // }).done(function(data){
-    //     // console.log(2, data);
-    //     if(data.code==200){
-    //         // console.log(3, data.list);
-    //         // $('#new-message').val("");
-    //         // console.log("success")
-    //         getSweet(list_follow) //On récupère les nouveaux messages
-    //     }
-    // });
     var post_url = "http://localhost:8080/Twister/sweet/addComment" //get form action url
     var form_data = "key=" + localStorage.getItem("user-key") + "&sweetId=" + sweet_id + "&commentMessage=" + comment;
     $.post( post_url, form_data, function( response ) {
